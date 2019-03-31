@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+
+//external components
 import {
   Container,
   Row,
@@ -11,7 +13,9 @@ import {
 import { MDBDataTable } from "mdbreact";
 import MaterialTable from "material-table";
 import PageTitle from "../../components/common/PageTitle";
+import swal from "sweetalert";
 
+//api
 import feathers from "../../feathers";
 
 class Index extends Component {
@@ -28,7 +32,13 @@ class Index extends Component {
 
   getInfo = async () => {
     const reports = feathers.service("reports");
-    let getRecords = await reports.find({});
+    let getRecords = await reports.find({
+      query: {
+        deleted: {
+          $nin: [1]
+        }
+      }
+    });
     if (getRecords.data.length > 0) {
       this.setState({ dataTable: getRecords.data });
     } else {
@@ -51,8 +61,35 @@ class Index extends Component {
     console.log("onPreview value-->", value);
   };
 
-  onDelete = value => {
-    console.log("onDelete value!-->", value);
+  onDelete = async value => {
+    const reports = feathers.service("reports");
+    try {
+      swal({
+        title: "¿Estas seguro de eliminarlo?",
+        text: "Una vez eliminado el registro, no podrás recuperarlo",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        dangerMode: true
+      }).then(async willDelete => {
+        if (willDelete) {
+          let recordToDelete = {
+            deleted: 1
+          };
+          let deleteRecord = await reports.patch(value, recordToDelete);
+          console.log("deleteRecord-->", deleteRecord);
+          this.getInfo();
+          swal("Exito", "Eliminado correctamente", {
+            icon: "success",
+            button: "Aceptar",
+            timer: 1000
+          });
+        } else {
+          //swal("Your imaginary file is safe!");
+        }
+      });
+    } catch (error) {
+      console.log("seems exists an issue there-->", error);
+    }
   };
 
   render() {

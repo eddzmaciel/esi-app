@@ -76,10 +76,6 @@ class ViewForm extends Component {
     }
   };
 
-  onUpdate = value => {
-    console.log("saving report info!-->", value);
-  };
-
   onCancel = value => {
     this.props.history.push("/reports");
   };
