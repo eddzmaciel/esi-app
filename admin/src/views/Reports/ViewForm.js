@@ -27,11 +27,56 @@ class ViewForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      formObject: {}
+      formObject: { title: "", dateGenerated: "", description: "" }
     };
   }
 
-  onAdd = value => {
+  componentWillMount = async () => {
+    const { location } = this.props;
+    if (location.state && location.state.report !== undefined) {
+      this.setState({ formObject: location.state.report });
+    } else {
+      this.setState({
+        formObject: { title: "", dateGenerated: "", description: "" }
+      });
+    }
+  };
+  onAdd = async () => {
+    const { location } = this.props;
+    let { formObject } = this.state;
+    const reports = feathers.service("reports");
+    if (formObject.title !== "") {
+      try {
+        if (location.state && location.state.report !== undefined) {
+          let recordId = location.state.report._id;
+          let recordToUpdate = {
+            title: formObject.title,
+            dateGenerated: formObject.dateGenerated,
+            description: formObject.description
+          };
+          let updateRecord = await reports.patch(recordId, recordToUpdate);
+          swal("Exito", "Actualizado correctamente", "success", {
+            timer: 1200
+          });
+          this.props.history.push("/reports");
+        } else {
+          let newRecord = await reports.create(formObject);
+          swal("Exito", "Agregado correctamente", "success", {
+            timer: 1200
+          });
+          this.props.history.push("/reports");
+        }
+      } catch (error) {
+        console.log("seems exist an issue there-->", error);
+      }
+    } else {
+      swal("Alerta", "Es necesario agregar el título del reporte.", "warning", {
+        timer: 3000
+      });
+    }
+  };
+
+  onUpdate = value => {
     console.log("saving report info!-->", value);
   };
 
@@ -41,14 +86,17 @@ class ViewForm extends Component {
 
   onChange = (path, value) => {
     let { formObject } = this.state;
-    console.log("path, value", path, value);
-    this.setState({ ...formObject, [path]: value });
+    let newFormObject = { ...formObject, [path]: value };
+    this.setState({ formObject: newFormObject });
+
+    //or if you want to use immutable
+    // let newFormObject = immutable.set(formObject, path, value);
+    // this.setState({ formObject: newFormObject });
   };
 
   render() {
     const { formObject } = this.state;
 
-    console.log("formObject-->", formObject);
     return (
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
@@ -119,13 +167,13 @@ class ViewForm extends Component {
                           </Row> */}
                           <Row form>
                             <Col md="4" className="form-group">
-                              <label htmlFor="name">Título:</label>
+                              <label htmlFor="title">Título:</label>
                               <FormInput
                                 id="title"
                                 type="text"
                                 placeholder="Ingrese el texto..."
                                 value={
-                                  formObject.title !== null
+                                  formObject !== undefined
                                     ? formObject.title
                                     : ""
                                 }
@@ -137,15 +185,18 @@ class ViewForm extends Component {
                             <Col md="4" className="form-group">
                               <label htmlFor="price">Fecha:</label>
                               <FormInput
-                                id="date"
+                                id="dateGenerated"
                                 type="date"
                                 value={
-                                  formObject.date !== null
-                                    ? formObject.date
+                                  formObject !== undefined
+                                    ? formObject.dateGenerated
                                     : ""
                                 }
                                 onChange={event =>
-                                  this.onChange("date", event.target.value)
+                                  this.onChange(
+                                    "dateGenerated",
+                                    event.target.value
+                                  )
                                 }
                               />
                             </Col>
@@ -157,7 +208,7 @@ class ViewForm extends Component {
                               id="description"
                               rows="5"
                               value={
-                                formObject.description !== null
+                                formObject !== undefined
                                   ? formObject.description
                                   : ""
                               }

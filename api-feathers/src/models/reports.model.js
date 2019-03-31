@@ -10,7 +10,9 @@ module.exports = function(app) {
       title: { type: String, required: true },
       description: { type: String, required: true },
       images: { type: Array, default: [] },
-      dateGenerated: { type: String, requiered: true }
+      dateGenerated: { type: String, requiered: true },
+      //this field goes on all the models
+      deleted: { type: Number, default: 0 }
     },
     {
       timestamps: true,

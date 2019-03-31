@@ -9,106 +9,50 @@ import {
   Button
 } from "shards-react";
 import { MDBDataTable } from "mdbreact";
+import MaterialTable from "material-table";
 import PageTitle from "../../components/common/PageTitle";
 
 import feathers from "../../feathers";
-
-const ButtonsActions = props => {
-  return (
-    <div
-      className="rt-td"
-      role="gridcell"
-      style={{ flex: "180 0 auto", width: 180, maxWidth: 300 }}
-    >
-      <div className="d-table mx-auto btn-group-sm btn-group">
-        <Button
-          className="btn btn-white"
-          onClick={() => props.onOpen(props.value)}
-        >
-          <i className="material-icons">border_color</i>
-        </Button>
-        <Button
-          className="btn btn-white"
-          onClick={() => props.onPreview(props.value)}
-        >
-          <i className="material-icons">visibility</i>
-        </Button>
-        <Button
-          className="btn btn-white"
-          onClick={() => props.onDelete(props.value)}
-        >
-          <i className="material-icons">delete</i>
-        </Button>
-      </div>
-    </div>
-  );
-};
 
 class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataTable: {
-        columns: [
-          {
-            label: "Título de reporte",
-            field: "title",
-            sort: "asc",
-            width: 100
-          },
-          {
-            label: "Fecha",
-            field: "date",
-            sort: "asc",
-            width: 100
-          },
-          {
-            label: "Descripción",
-            field: "description",
-            sort: "asc",
-            width: 180
-          },
-
-          {
-            label: "Acciones",
-            field: "operations",
-            sort: "asc",
-            width: 80
-          }
-        ],
-        rows: [
-          {
-            title: "Reporte Trabajo Api",
-            date: "23/02/2019",
-            description: "Rayos X",
-            operations: (
-              <ButtonsActions
-                onOpen={this.onOpen}
-                onPreview={this.onPreview}
-                onDelete={this.onDelete}
-                value={"12520008552"}
-              />
-            )
-          }
-        ]
-      }
+      dataTable: []
     };
   }
 
   componentWillMount = async () => {
-    const reports = feathers.service("reports");
-    let getData = await reports.find({});
-
-    console.log("getData-->", getData);
+    this.getInfo();
   };
 
-  onOpen = value => {
-    console.log("opening study info!-->", value);
-    this.props.history.push("/reports-form");
+  getInfo = async () => {
+    const reports = feathers.service("reports");
+    let getRecords = await reports.find({});
+    if (getRecords.data.length > 0) {
+      this.setState({ dataTable: getRecords.data });
+    } else {
+      console.log("getRecords.data-->", getRecords.data);
+    }
+  };
+
+  onOpenForm = value => {
+    if (value !== null) {
+      this.props.history.push({
+        pathname: "/reports-form",
+        state: { report: value }
+      });
+    } else {
+      this.props.history.push("/reports-form");
+    }
+  };
+
+  onPreview = value => {
+    console.log("onPreview value-->", value);
   };
 
   onDelete = value => {
-    console.log("deleting study!-->", value);
+    console.log("onDelete value!-->", value);
   };
 
   render() {
@@ -135,7 +79,7 @@ class Index extends Component {
                     <h6 className="m-0">Listado de datos</h6>
                   </Col>
                   <Col sm="12" lg="6" className="text-sm-right">
-                    <Button squared onClick={() => this.onOpen()}>
+                    <Button squared onClick={() => this.onOpenForm()}>
                       Nuevo
                     </Button>
                   </Col>
@@ -143,7 +87,77 @@ class Index extends Component {
               </CardHeader>
               <CardBody className="p-0 pb-3">
                 <div style={{ margin: 15 }}>
-                  <MDBDataTable striped hover data={dataTable} />
+                  <MaterialTable
+                    columns={[
+                      {
+                        title: "Título de reporte",
+                        field: "title"
+                      },
+                      { title: "Fecha", field: "dateGenerated" },
+                      {
+                        title: "Descripción",
+                        field: "description"
+                      }
+                    ]}
+                    data={dataTable}
+                    title="Reportes Generados"
+                    onRowClick={(event, rowData) => {
+                      this.onOpenForm(rowData);
+                    }}
+                    actions={[
+                      {
+                        icon: "border_color",
+                        tooltip: "Editar",
+                        iconProps: {
+                          style: { fontSize: 20, color: "#C3C7CC" }
+                        },
+                        onClick: (event, rowData) => {
+                          this.onOpenForm(rowData);
+                        }
+                      },
+                      {
+                        icon: "visibility",
+                        tooltip: "Ver",
+                        iconProps: {
+                          style: { fontSize: 20, color: "#C3C7CC" }
+                        },
+                        onClick: (event, rowData) => {
+                          this.onPreview(rowData._id);
+                        }
+                      },
+                      {
+                        icon: "delete",
+                        tooltip: "Eliminar",
+                        iconProps: {
+                          style: { fontSize: 20, color: "#C41E3C" }
+                        },
+                        onClick: (event, rowData) => {
+                          this.onDelete(rowData._id);
+                        }
+                      }
+
+                      /* rowData => ({
+                        icon: "account_circle",
+                        tooltip: "show user info",
+                        disabled: rowData.title == "dfgdfg",
+                        onClick: (event, rowData) => {
+                          alert("you clicked " + rowData.title);
+                        }
+                      }) */
+                    ]}
+                    options={{
+                      columnButton: true,
+                      exportButton: true,
+                      actionsColumnIndex: -1,
+                      paging: true,
+                      showEmptyDataSourceMessage: true
+                    }}
+                    localization={{
+                      body: {
+                        emptyDataSourceMessage: "No hay datos para mostrar..."
+                      }
+                    }}
+                  />
                 </div>
               </CardBody>
             </Card>
