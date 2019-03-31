@@ -7,8 +7,8 @@ export default function() {
       htmlAfter: ""
     },
     {
-      title: "Estudios Médicos",
-      to: "/studies",
+      title: "Reportes",
+      to: "/reports",
       htmlBefore: '<i class="material-icons">edit</i>',
       htmlAfter: ""
     },

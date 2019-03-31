@@ -11,9 +11,9 @@ import UserProfileLite from "./views/UserProfileLite";
 import Errors from "./views/Errors";
 
 import Dashboard from "./views/Dashboard/Index";
-import Studies from "./views/Studies/Index";
-import StudiesForm from "./views/Studies/ViewForm";
-import StudyPreview from "./views/Studies/StudyPreview";
+import Reports from "./views/Reports/Index";
+import ReportsForm from "./views/Reports/ViewForm";
+
 export default [
   {
     path: "/",
@@ -22,13 +22,8 @@ export default [
     component: () => <Redirect to="/dashboard" />
   },
   { path: "/dashboard", layout: DefaultLayout, component: Dashboard },
-  { path: "/studies", layout: DefaultLayout, component: Studies },
-  { path: "/studies-form", layout: DefaultLayout, component: StudiesForm },
-  {
-    path: "/studies-preview",
-    layout: DefaultLayout,
-    component: StudyPreview
-  },
+  { path: "/reports", layout: DefaultLayout, component: Reports },
+  { path: "/reports-form", layout: DefaultLayout, component: ReportsForm },
   {
     path: "/errors",
     layout: DefaultLayout,
