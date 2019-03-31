@@ -5,11 +5,8 @@ import { Redirect } from "react-router-dom";
 import { DefaultLayout } from "./layouts";
 
 // Route Views
-
 import UserProfileLite from "./views/UserProfileLite";
-
 import Errors from "./views/Errors";
-
 import Dashboard from "./views/Dashboard/Index";
 import Reports from "./views/Reports/Index";
 import ReportsForm from "./views/Reports/ViewForm";
@@ -30,7 +27,7 @@ export default [
     component: Errors
   },
   {
-    path: "/user-profile-lite",
+    path: "/user-profile",
     layout: DefaultLayout,
     component: UserProfileLite
   }

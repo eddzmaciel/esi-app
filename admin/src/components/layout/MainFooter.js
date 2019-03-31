@@ -39,26 +39,18 @@ MainFooter.propTypes = {
 
 MainFooter.defaultProps = {
   contained: false,
-  copyright: "Copyright © 2018 DesignRevision",
+  copyright: "Copyright © 2019 www.edsonmaciel.com",
   menuItems: [
     {
-      title: "Home",
-      to: "#"
+      title: "Inicio",
+      to: "/"
     },
     {
-      title: "Services",
-      to: "#"
+      title: "Reportes",
+      to: "/reports"
     },
     {
-      title: "About",
-      to: "#"
-    },
-    {
-      title: "Products",
-      to: "#"
-    },
-    {
-      title: "Blog",
+      title: "Acerca de ",
       to: "#"
     }
   ]

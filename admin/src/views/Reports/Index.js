@@ -122,58 +122,57 @@ class Index extends Component {
                   </Col>
                 </Row>
               </CardHeader>
-              <CardBody className="p-0 pb-3">
-                <div style={{ margin: 15 }}>
-                  <MaterialTable
-                    columns={[
-                      {
-                        title: "Título de reporte",
-                        field: "title"
-                      },
-                      { title: "Fecha", field: "dateGenerated" },
-                      {
-                        title: "Descripción",
-                        field: "description"
-                      }
-                    ]}
-                    data={dataTable}
-                    title="Reportes Generados"
-                    onRowClick={(event, rowData) => {
-                      this.onOpenForm(rowData);
-                    }}
-                    actions={[
-                      {
-                        icon: "border_color",
-                        tooltip: "Editar",
-                        iconProps: {
-                          style: { fontSize: 20, color: "#C3C7CC" }
-                        },
-                        onClick: (event, rowData) => {
-                          this.onOpenForm(rowData);
-                        }
-                      },
-                      {
-                        icon: "visibility",
-                        tooltip: "Ver",
-                        iconProps: {
-                          style: { fontSize: 20, color: "#C3C7CC" }
-                        },
-                        onClick: (event, rowData) => {
-                          this.onPreview(rowData._id);
-                        }
-                      },
-                      {
-                        icon: "delete",
-                        tooltip: "Eliminar",
-                        iconProps: {
-                          style: { fontSize: 20, color: "#C41E3C" }
-                        },
-                        onClick: (event, rowData) => {
-                          this.onDelete(rowData._id);
-                        }
-                      }
 
-                      /* rowData => ({
+              <MaterialTable
+                columns={[
+                  {
+                    title: "Título de reporte",
+                    field: "title"
+                  },
+                  { title: "Fecha", field: "dateGenerated" },
+                  {
+                    title: "Descripción",
+                    field: "description"
+                  }
+                ]}
+                data={dataTable}
+                title="Reportes Generados"
+                onRowClick={(event, rowData) => {
+                  this.onOpenForm(rowData);
+                }}
+                actions={[
+                  {
+                    icon: "border_color",
+                    tooltip: "Editar",
+                    iconProps: {
+                      style: { fontSize: 20, color: "#C3C7CC" }
+                    },
+                    onClick: (event, rowData) => {
+                      this.onOpenForm(rowData);
+                    }
+                  },
+                  {
+                    icon: "visibility",
+                    tooltip: "Ver",
+                    iconProps: {
+                      style: { fontSize: 20, color: "#C3C7CC" }
+                    },
+                    onClick: (event, rowData) => {
+                      this.onPreview(rowData._id);
+                    }
+                  },
+                  {
+                    icon: "delete",
+                    tooltip: "Eliminar",
+                    iconProps: {
+                      style: { fontSize: 20, color: "#C41E3C" }
+                    },
+                    onClick: (event, rowData) => {
+                      this.onDelete(rowData._id);
+                    }
+                  }
+
+                  /* rowData => ({
                         icon: "account_circle",
                         tooltip: "show user info",
                         disabled: rowData.title == "dfgdfg",
@@ -181,22 +180,20 @@ class Index extends Component {
                           alert("you clicked " + rowData.title);
                         }
                       }) */
-                    ]}
-                    options={{
-                      columnButton: true,
-                      exportButton: true,
-                      actionsColumnIndex: -1,
-                      paging: true,
-                      showEmptyDataSourceMessage: true
-                    }}
-                    localization={{
-                      body: {
-                        emptyDataSourceMessage: "No hay datos para mostrar..."
-                      }
-                    }}
-                  />
-                </div>
-              </CardBody>
+                ]}
+                options={{
+                  columnButton: true,
+                  exportButton: true,
+                  actionsColumnIndex: -1,
+                  paging: true,
+                  showEmptyDataSourceMessage: true
+                }}
+                localization={{
+                  body: {
+                    emptyDataSourceMessage: "No hay datos para mostrar..."
+                  }
+                }}
+              />
             </Card>
           </Col>
         </Row>
