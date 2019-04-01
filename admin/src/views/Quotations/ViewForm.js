@@ -12,7 +12,8 @@ import {
     FormTextarea,
     ListGroup,
     ListGroupItem,
-    Row
+    Row,
+    FormSelect
 } from 'shards-react';
 import swal from 'sweetalert';
 //components
@@ -24,48 +25,70 @@ class ViewForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            formObject: { title: '', dateGenerated: '', description: '' }
+            subject: { type: String, required: true },
+            formObject: {
+                title: '',
+                subject: '',
+                date: '',
+                description: '',
+                clientId: '',
+                items: [],
+                attendant: ''
+            }
         };
     }
 
     componentWillMount = async () => {
         const { location } = this.props;
-        if (location.state && location.state.report !== undefined) {
-            this.setState({ formObject: location.state.report });
+        if (location.state && location.state.quotation !== undefined) {
+            this.setState({ formObject: location.state.quotation });
         } else {
             this.setState({
-                formObject: { title: '', dateGenerated: '', description: '' }
+                formObject: {
+                    title: '',
+                    date: '',
+                    subject: '',
+                    description: '',
+                    clientId: '',
+                    items: [],
+                    attendant: ''
+                }
             });
         }
     };
     onAdd = async () => {
         const { location } = this.props;
         let { formObject } = this.state;
-        const reports = feathers.service('reports');
+        const quotations = feathers.service('quotations');
         if (formObject.title !== '') {
             try {
-                if (location.state && location.state.report !== undefined) {
-                    let recordId = location.state.report._id;
+                if (location.state && location.state.quotation !== undefined) {
+                    let recordId = location.state.quotation._id;
                     let recordToUpdate = {
                         title: formObject.title,
-                        dateGenerated: formObject.dateGenerated,
-                        description: formObject.description
+                        subject: formObject.subject,
+                        date: formObject.date,
+                        description: formObject.description,
+                        attendant: formObject.attendant
                     };
-                    let updateRecord = await reports.patch(
+                    let updateRecord = await quotations.patch(
                         recordId,
                         recordToUpdate
                     );
 
+                    //console.log('updateRecord-->', updateRecord);
+
                     swal('Exito', 'Actualizado correctamente', 'success', {
                         timer: 1200
                     });
-                    this.props.history.push('/reports');
+                    this.props.history.push('/quotations');
                 } else {
-                    let newRecord = await reports.create(formObject);
+                    //here you have to increase the quotation folio
+                    let newRecord = await quotations.create(formObject);
                     swal('Exito', 'Agregado correctamente', 'success', {
                         timer: 1200
                     });
-                    this.props.history.push('/reports');
+                    this.props.history.push('/quotations');
                 }
             } catch (error) {
                 console.log('seems exist an issue there-->', error);
@@ -83,7 +106,7 @@ class ViewForm extends Component {
     };
 
     onCancel = value => {
-        this.props.history.push('/reports');
+        this.props.history.push('/quotations');
     };
 
     onChange = (path, value) => {
@@ -112,6 +135,7 @@ class ViewForm extends Component {
                 </Row>
 
                 {/* Default Light Table */}
+
                 <Row>
                     <Col>
                         <Card small className="mb-4">
@@ -130,11 +154,11 @@ class ViewForm extends Component {
                                                 <Form>
                                                     <Row form>
                                                         <Col
-                                                            md="4"
+                                                            md="6"
                                                             className="form-group"
                                                         >
                                                             <label htmlFor="title">
-                                                                Título:
+                                                                Encabezado:
                                                             </label>
                                                             <FormInput
                                                                 id="title"
@@ -157,24 +181,74 @@ class ViewForm extends Component {
                                                             />
                                                         </Col>
                                                         <Col
-                                                            md="4"
+                                                            md="6"
                                                             className="form-group"
                                                         >
-                                                            <label htmlFor="dateGenerated">
-                                                                Fecha:
+                                                            <label htmlFor="subject">
+                                                                Asunto:
                                                             </label>
                                                             <FormInput
-                                                                id="dateGenerated"
-                                                                type="date"
+                                                                id="subject"
+                                                                type="text"
+                                                                placeholder="Ingrese el texto..."
                                                                 value={
                                                                     formObject !==
                                                                     undefined
-                                                                        ? formObject.dateGenerated
+                                                                        ? formObject.subject
                                                                         : ''
                                                                 }
                                                                 onChange={event =>
                                                                     this.onChange(
-                                                                        'dateGenerated',
+                                                                        'subject',
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Col>
+                                                    </Row>
+                                                    <Row form>
+                                                        <Col
+                                                            md="6"
+                                                            className="form-group"
+                                                        >
+                                                            <label htmlFor="client">
+                                                                Cliente:
+                                                            </label>
+                                                            <FormSelect id="client">
+                                                                <option>
+                                                                    --Seleccionar--
+                                                                </option>
+                                                                <option>
+                                                                    Carlitos El
+                                                                    hurfanito
+                                                                </option>
+                                                                <option>
+                                                                    Maria Segura
+                                                                    Lopez
+                                                                </option>
+                                                            </FormSelect>
+                                                        </Col>
+                                                        <Col
+                                                            md="6"
+                                                            className="form-group"
+                                                        >
+                                                            <label htmlFor="date">
+                                                                Fecha:
+                                                            </label>
+                                                            <FormInput
+                                                                id="date"
+                                                                type="date"
+                                                                value={
+                                                                    formObject !==
+                                                                    undefined
+                                                                        ? formObject.date
+                                                                        : ''
+                                                                }
+                                                                onChange={event =>
+                                                                    this.onChange(
+                                                                        'date',
                                                                         event
                                                                             .target
                                                                             .value
@@ -207,6 +281,15 @@ class ViewForm extends Component {
                                                             }
                                                         />
                                                     </FormGroup>
+
+                                                    {/* <Row form>
+                            <Col md="12" className="form-group">
+                              <FormCheckbox>
+                              I agree with
+                                your <a href="#">Privacy Policy</a>.
+                              </FormCheckbox>
+                            </Col>
+                          </Row> */}
                                                     <div
                                                         style={{
                                                             marginTop: 20

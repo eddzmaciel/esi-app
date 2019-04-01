@@ -20,8 +20,8 @@ class Index extends Component {
     };
 
     getInfo = async () => {
-        const reports = feathers.service('reports');
-        let getRecords = await reports.find({
+        const quotations = feathers.service('quotations');
+        let getRecords = await quotations.find({
             query: {
                 deleted: {
                     $nin: [1]
@@ -38,11 +38,11 @@ class Index extends Component {
     onOpenForm = value => {
         if (value !== null) {
             this.props.history.push({
-                pathname: '/reports-form',
-                state: { report: value }
+                pathname: '/quotations-form',
+                state: { quotation: value }
             });
         } else {
-            this.props.history.push('/reports-form');
+            this.props.history.push('/quotations-form');
         }
     };
 
@@ -51,7 +51,7 @@ class Index extends Component {
     };
 
     onDelete = async value => {
-        const reports = feathers.service('reports');
+        const quotations = feathers.service('quotations');
         try {
             swal({
                 title: '¿Estas seguro de eliminarlo?',
@@ -64,7 +64,7 @@ class Index extends Component {
                     let recordToDelete = {
                         deleted: 1
                     };
-                    let deleteRecord = await reports.patch(
+                    let deleteRecord = await quotations.patch(
                         value,
                         recordToDelete
                     );
@@ -92,7 +92,7 @@ class Index extends Component {
                 <Row noGutters className="page-header py-4">
                     <PageTitle
                         sm="6"
-                        title="Reportes "
+                        title="Cotizaciones "
                         subtitle="Módulo"
                         className="text-sm-left"
                     />
@@ -127,10 +127,18 @@ class Index extends Component {
                             <MaterialTable
                                 columns={[
                                     {
-                                        title: 'Título de reporte',
-                                        field: 'title'
+                                        title: 'Fólio',
+                                        field: 'folio'
                                     },
-                                    { title: 'Fecha', field: 'dateGenerated' },
+                                    { title: 'Encabezado', field: 'title' },
+                                    {
+                                        title: 'Asunto',
+                                        field: 'subject'
+                                    },
+                                    {
+                                        title: 'Fecha',
+                                        field: 'date'
+                                    },
                                     {
                                         title: 'Descripción',
                                         field: 'description'
