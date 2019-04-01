@@ -128,7 +128,7 @@ class ViewForm extends Component {
                 <Row noGutters className="page-header py-4">
                     <PageTitle
                         sm="6"
-                        title="Información del Reporte"
+                        title="Información de la Cotización"
                         subtitle="Módulo"
                         className="text-sm-left"
                     />
