@@ -181,15 +181,14 @@ class Index extends Component {
                                             this.onDelete(rowData._id);
                                         }
                                     }
-
                                     /* rowData => ({
-                        icon: "account_circle",
-                        tooltip: "show user info",
-                        disabled: rowData.title == "dfgdfg",
-                        onClick: (event, rowData) => {
-                          alert("you clicked " + rowData.title);
-                        }
-                      }) */
+                                        icon: "account_circle",
+                                        tooltip: "show user info",
+                                        disabled: rowData.title == "dfgdfg",
+                                        onClick: (event, rowData) => {
+                                        alert("you clicked " + rowData.title);
+                                        }
+                                    }) */
                                 ]}
                                 options={{
                                     columnButton: true,
@@ -197,7 +196,7 @@ class Index extends Component {
                                     actionsColumnIndex: -1,
                                     paging: true,
                                     showEmptyDataSourceMessage: true,
-                                    columnsButton: true
+                                    columns0Button: true
                                 }}
                                 localization={{
                                     body: {
