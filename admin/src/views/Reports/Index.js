@@ -196,7 +196,8 @@ class Index extends Component {
                                     exportButton: true,
                                     actionsColumnIndex: -1,
                                     paging: true,
-                                    showEmptyDataSourceMessage: true
+                                    showEmptyDataSourceMessage: true,
+                                    columnsButton: true
                                 }}
                                 localization={{
                                     body: {
