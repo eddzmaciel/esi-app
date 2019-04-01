@@ -1,42 +1,54 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 // Layout Types
-import { DefaultLayout } from "./layouts";
+import { DefaultLayout } from './layouts';
 
 // Route Views
+import UserProfileLite from './views/UserProfileLite';
+import Errors from './views/Errors';
+import Dashboard from './views/Dashboard/Index';
+import Reports from './views/Reports/Index';
+import ReportsForm from './views/Reports/ViewForm';
+import Clients from './views/Clients/Index';
+import ClientsForm from './views/Clients/ViewForm';
+import Providers from './views/Providers/Index';
+import ProvidersForm from './views/Providers/ViewForm';
+import Quotations from './views/Quotations/Index';
+import QuotationsForm from './views/Quotations/ViewForm';
 
-import UserProfileLite from "./views/UserProfileLite";
-
-import Errors from "./views/Errors";
-
-import Dashboard from "./views/Dashboard/Index";
-import Studies from "./views/Studies/Index";
-import StudiesForm from "./views/Studies/ViewForm";
-import StudyPreview from "./views/Studies/StudyPreview";
 export default [
-  {
-    path: "/",
-    exact: true,
-    layout: DefaultLayout,
-    component: () => <Redirect to="/dashboard" />
-  },
-  { path: "/dashboard", layout: DefaultLayout, component: Dashboard },
-  { path: "/studies", layout: DefaultLayout, component: Studies },
-  { path: "/studies-form", layout: DefaultLayout, component: StudiesForm },
-  {
-    path: "/studies-preview",
-    layout: DefaultLayout,
-    component: StudyPreview
-  },
-  {
-    path: "/errors",
-    layout: DefaultLayout,
-    component: Errors
-  },
-  {
-    path: "/user-profile-lite",
-    layout: DefaultLayout,
-    component: UserProfileLite
-  }
+    {
+        path: '/',
+        exact: true,
+        layout: DefaultLayout,
+        component: () => <Redirect to="/dashboard" />
+    },
+    { path: '/dashboard', layout: DefaultLayout, component: Dashboard },
+    { path: '/reports', layout: DefaultLayout, component: Reports },
+    { path: '/reports-form', layout: DefaultLayout, component: ReportsForm },
+    { path: '/clients', layout: DefaultLayout, component: Clients },
+    { path: '/clients-form', layout: DefaultLayout, component: ClientsForm },
+    { path: '/providers', layout: DefaultLayout, component: Providers },
+    {
+        path: '/providers-form',
+        layout: DefaultLayout,
+        component: ProvidersForm
+    },
+    { path: '/quotations', layout: DefaultLayout, component: Quotations },
+    {
+        path: '/quotations-form',
+        layout: DefaultLayout,
+        component: QuotationsForm
+    },
+    {
+        path: '/errors',
+        layout: DefaultLayout,
+        component: Errors
+    },
+    {
+        path: '/user-profile',
+        layout: DefaultLayout,
+        component: UserProfileLite
+    }
 ];

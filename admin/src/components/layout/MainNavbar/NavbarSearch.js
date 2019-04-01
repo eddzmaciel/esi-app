@@ -15,10 +15,7 @@ export default () => (
           <i className="material-icons">search</i>
         </InputGroupText>
       </InputGroupAddon>
-      <FormInput
-        className="navbar-search"
-        placeholder="Search for something..."
-      />
+      <FormInput className="navbar-search" placeholder="buscar algo..." />
     </InputGroup>
   </Form>
 );
