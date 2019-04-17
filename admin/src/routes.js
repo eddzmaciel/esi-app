@@ -16,6 +16,8 @@ import Providers from './views/Providers/Index';
 import ProvidersForm from './views/Providers/ViewForm';
 import Quotations from './views/Quotations/Index';
 import QuotationsForm from './views/Quotations/ViewForm';
+import Services from './views/Services/Index';
+import ServicesForm from './views/Services/ViewForm';
 
 export default [
     {
@@ -40,6 +42,12 @@ export default [
         path: '/quotations-form',
         layout: DefaultLayout,
         component: QuotationsForm
+    },
+    { path: '/services', layout: DefaultLayout, component: Services },
+    {
+        path: '/services-form',
+        layout: DefaultLayout,
+        component: ServicesForm
     },
     {
         path: '/errors',

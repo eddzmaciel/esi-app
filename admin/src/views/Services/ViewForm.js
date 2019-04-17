@@ -7,9 +7,7 @@ import {
     Col,
     Container,
     Form,
-    FormGroup,
     FormInput,
-    FormTextarea,
     ListGroup,
     ListGroupItem,
     Row
@@ -24,49 +22,52 @@ class ViewForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            formObject: { title: '', dateGenerated: '', description: '' }
+            formObject: {
+                name: '',
+                description: ''
+            }
         };
     }
 
     componentWillMount = async () => {
         const { location } = this.props;
-        if (location.state && location.state.report !== undefined) {
-            this.setState({ formObject: location.state.report });
+        if (location.state && location.state.service !== undefined) {
+            this.setState({ formObject: location.state.service });
         } else {
             this.setState({
-                formObject: { title: '', dateGenerated: '', description: '' }
+                formObject: {
+                    name: '',
+                    description: ''
+                }
             });
         }
     };
-
     onAdd = async () => {
         const { location } = this.props;
         let { formObject } = this.state;
-        const reports = feathers.service('reports');
+        const services = feathers.service('services');
         if (formObject.title !== '') {
             try {
-                if (location.state && location.state.report !== undefined) {
-                    let recordId = location.state.report._id;
+                if (location.state && location.state.provider !== undefined) {
+                    let recordId = location.state.provider._id;
                     let recordToUpdate = {
-                        title: formObject.title,
-                        dateGenerated: formObject.dateGenerated,
+                        name: formObject.name,
                         description: formObject.description
                     };
-                    let updateRecord = await reports.patch(
+                    let updateRecord = await services.patch(
                         recordId,
                         recordToUpdate
                     );
-
                     swal('Exito', 'Actualizado correctamente', 'success', {
                         timer: 1200
                     });
-                    this.props.history.push('/reports');
+                    this.props.history.push('/services');
                 } else {
-                    let newRecord = await reports.create(formObject);
+                    let newRecord = await services.create(formObject);
                     swal('Exito', 'Agregado correctamente', 'success', {
                         timer: 1200
                     });
-                    this.props.history.push('/reports');
+                    this.props.history.push('/services');
                 }
             } catch (error) {
                 console.log('seems exist an issue there-->', error);
@@ -84,7 +85,7 @@ class ViewForm extends Component {
     };
 
     onCancel = value => {
-        this.props.history.push('/reports');
+        this.props.history.push('/services');
     };
 
     onChange = (path, value) => {
@@ -106,13 +107,14 @@ class ViewForm extends Component {
                 <Row noGutters className="page-header py-4">
                     <PageTitle
                         sm="6"
-                        title="Información del Reporte"
+                        title="Información del Servicio"
                         subtitle="Módulo"
                         className="text-sm-left"
                     />
                 </Row>
 
                 {/* Default Light Table */}
+
                 <Row>
                     <Col>
                         <Card small className="mb-4">
@@ -121,6 +123,9 @@ class ViewForm extends Component {
                                     <Col sm="12" lg="6">
                                         <h6 className="m-0">Formulario</h6>
                                     </Col>
+                                    {/* <Col sm="12" lg="6" className="text-sm-right">
+                    <Button squared>Nuevo</Button>
+                  </Col> */}
                                 </Row>
                             </CardHeader>
                             <CardBody className="p-0 pb-3">
@@ -131,25 +136,26 @@ class ViewForm extends Component {
                                                 <Form>
                                                     <Row form>
                                                         <Col
-                                                            md="4"
+                                                            md="6"
                                                             className="form-group"
                                                         >
-                                                            <label htmlFor="title">
-                                                                Título:
+                                                            <label htmlFor="name">
+                                                                Nombre del
+                                                                servicio:
                                                             </label>
                                                             <FormInput
-                                                                id="title"
+                                                                id="name"
                                                                 type="text"
                                                                 placeholder="Ingrese el texto..."
                                                                 value={
                                                                     formObject !==
                                                                     undefined
-                                                                        ? formObject.title
+                                                                        ? formObject.name
                                                                         : ''
                                                                 }
                                                                 onChange={event =>
                                                                     this.onChange(
-                                                                        'title',
+                                                                        'name',
                                                                         event
                                                                             .target
                                                                             .value
@@ -158,24 +164,25 @@ class ViewForm extends Component {
                                                             />
                                                         </Col>
                                                         <Col
-                                                            md="4"
+                                                            md="3"
                                                             className="form-group"
                                                         >
-                                                            <label htmlFor="dateGenerated">
-                                                                Fecha:
+                                                            <label htmlFor="description">
+                                                                Descripción:
                                                             </label>
                                                             <FormInput
-                                                                id="dateGenerated"
-                                                                type="date"
+                                                                id="description"
+                                                                type="text"
+                                                                placeholder="Ingrese el texto..."
                                                                 value={
                                                                     formObject !==
                                                                     undefined
-                                                                        ? formObject.dateGenerated
+                                                                        ? formObject.description
                                                                         : ''
                                                                 }
                                                                 onChange={event =>
                                                                     this.onChange(
-                                                                        'dateGenerated',
+                                                                        'description',
                                                                         event
                                                                             .target
                                                                             .value
@@ -185,29 +192,6 @@ class ViewForm extends Component {
                                                         </Col>
                                                     </Row>
 
-                                                    <FormGroup>
-                                                        <label htmlFor="description">
-                                                            Descripción:
-                                                        </label>
-                                                        <FormTextarea
-                                                            id="description"
-                                                            rows="5"
-                                                            placeholder="Ingrese el texto..."
-                                                            value={
-                                                                formObject !==
-                                                                undefined
-                                                                    ? formObject.description
-                                                                    : ''
-                                                            }
-                                                            onChange={event =>
-                                                                this.onChange(
-                                                                    'description',
-                                                                    event.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                        />
-                                                    </FormGroup>
                                                     <div
                                                         style={{
                                                             marginTop: 20

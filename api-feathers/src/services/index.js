@@ -7,6 +7,7 @@ const quotations = require('./quotations/quotations.service.js');
 const states = require('./states/states.service.js');
 const cities = require('./cities/cities.service.js');
 const entities = require('./entities/entities.service.js');
+const services = require('./services/services.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(reports);
@@ -18,4 +19,5 @@ module.exports = function (app) {
   app.configure(states);
   app.configure(cities);
   app.configure(entities);
+  app.configure(services);
 };

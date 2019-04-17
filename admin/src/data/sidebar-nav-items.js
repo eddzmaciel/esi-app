@@ -31,6 +31,12 @@ export default function() {
             htmlAfter: ''
         },
         {
+            title: 'Servicios',
+            to: '/services',
+            htmlBefore: '<i class="material-icons">local_shipping</i>',
+            htmlAfter: ''
+        },
+        {
             title: 'Perfil Usuario',
             htmlBefore: '<i class="material-icons">person</i>',
             to: '/user-profile'

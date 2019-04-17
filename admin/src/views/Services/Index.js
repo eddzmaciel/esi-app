@@ -20,8 +20,8 @@ class Index extends Component {
     };
 
     getInfo = async () => {
-        const reports = feathers.service('reports');
-        let getRecords = await reports.find({
+        const services = feathers.service('services');
+        let getRecords = await services.find({
             query: {
                 deleted: {
                     $nin: [1]
@@ -36,13 +36,13 @@ class Index extends Component {
     };
 
     onOpenForm = value => {
-        if (value !== undefined && value !== '') {
+        if (value !== null) {
             this.props.history.push({
-                pathname: '/reports-form',
-                state: { report: value }
+                pathname: '/services-form',
+                state: { service: value }
             });
         } else {
-            this.props.history.push('/reports-form');
+            this.props.history.push('/services-form');
         }
     };
 
@@ -51,7 +51,7 @@ class Index extends Component {
     };
 
     onDelete = async value => {
-        const reports = feathers.service('reports');
+        const services = feathers.service('services');
         try {
             swal({
                 title: '¿Estas seguro de eliminarlo?',
@@ -64,7 +64,7 @@ class Index extends Component {
                     let recordToDelete = {
                         deleted: 1
                     };
-                    let deleteRecord = await reports.patch(
+                    let deleteRecord = await services.patch(
                         value,
                         recordToDelete
                     );
@@ -92,7 +92,7 @@ class Index extends Component {
                 <Row noGutters className="page-header py-4">
                     <PageTitle
                         sm="6"
-                        title="Reportes "
+                        title="Proveedores "
                         subtitle="Módulo"
                         className="text-sm-left"
                     />
@@ -127,10 +127,9 @@ class Index extends Component {
                             <MaterialTable
                                 columns={[
                                     {
-                                        title: 'Título de reporte',
-                                        field: 'title'
+                                        title: 'Nombre Servicio',
+                                        field: 'name'
                                     },
-                                    { title: 'Fecha', field: 'dateGenerated' },
                                     {
                                         title: 'Descripción',
                                         field: 'description'
@@ -181,22 +180,22 @@ class Index extends Component {
                                             this.onDelete(rowData._id);
                                         }
                                     }
+
                                     /* rowData => ({
-                                        icon: "account_circle",
-                                        tooltip: "show user info",
-                                        disabled: rowData.title == "dfgdfg",
-                                        onClick: (event, rowData) => {
-                                        alert("you clicked " + rowData.title);
-                                        }
-                                    }) */
+                        icon: "account_circle",
+                        tooltip: "show user info",
+                        disabled: rowData.title == "dfgdfg",
+                        onClick: (event, rowData) => {
+                          alert("you clicked " + rowData.title);
+                        }
+                      }) */
                                 ]}
                                 options={{
                                     columnButton: true,
                                     exportButton: true,
                                     actionsColumnIndex: -1,
                                     paging: true,
-                                    showEmptyDataSourceMessage: true,
-                                    columns0Button: true
+                                    showEmptyDataSourceMessage: true
                                 }}
                                 localization={{
                                     body: {
